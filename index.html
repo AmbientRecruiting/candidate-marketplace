@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Available Candidates | Ambient Recruiting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ===== Brand colors: replace with exact hex values from the Ambient brand kit ===== */
+  :root {
+    --teal: #0b6b6f;        /* Ambient Teal */
+    --turquoise: #1fb5b0;   /* Turquoise */
+    --gold: #e0a526;        /* Gold */
+    --seafoam: #dff3ef;     /* Seafoam */
+    --ocean: #164e74;       /* Ocean Blue */
+    --ink: #1d2b33;
+    --muted: #5d6d75;
+    --line: #dfe6e8;
+    --bg: #f6f9f9;
+    --card: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Inter, "Open Sans", system-ui, sans-serif; color: var(--ink); background: var(--bg); }
+  a { color: var(--teal); }
+  header.top { background: var(--teal); color: #fff; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+  .top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 18px; padding-bottom: 18px; }
+  .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 20px; letter-spacing: .2px; }
+  .brand img { height: 34px; display: block; }
+  .brand small { display: block; font-weight: 500; font-size: 12px; opacity: .85; letter-spacing: 1.5px; text-transform: uppercase; }
+  .tagline { font-size: 13px; opacity: .9; }
+  .hero { background: linear-gradient(135deg, var(--teal), var(--ocean)); color: #fff; padding: 34px 0 72px; }
+  .hero h1 { margin: 0 0 6px; font-size: 30px; }
+  .hero p { margin: 0; opacity: .92; max-width: 640px; line-height: 1.5; }
+  .controls { margin-top: -44px; background: var(--card); border-radius: 14px; box-shadow: 0 8px 24px rgba(16,40,50,.10); padding: 16px; display: grid; grid-template-columns: 2fr repeat(4, 1fr); gap: 10px; }
+  .controls input, .controls select { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 9px; font: inherit; font-size: 14px; background: #fff; color: var(--ink); min-width: 0; }
+  .controls input:focus, .controls select:focus { outline: 2px solid var(--turquoise); border-color: transparent; }
+  .bar { display: flex; justify-content: space-between; align-items: center; margin: 18px 0 10px; color: var(--muted); font-size: 14px; flex-wrap: wrap; gap: 8px; }
+  .bar label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .chip { border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 6px 12px; font-size: 13px; cursor: pointer; color: var(--ink); font-family: inherit; }
+  .chip[aria-pressed="true"] { background: var(--teal); color: #fff; border-color: var(--teal); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; padding-bottom: 40px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 10px; cursor: pointer; transition: box-shadow .15s, transform .15s; position: relative; text-align: left; font: inherit; color: inherit; }
+  .card:hover, .card:focus-visible { box-shadow: 0 8px 22px rgba(16,40,50,.12); transform: translateY(-2px); outline: none; }
+  .card .cat { font-size: 12px; font-weight: 600; color: var(--teal); text-transform: uppercase; letter-spacing: .6px; }
+  .card h3 { margin: 0; font-size: 18px; line-height: 1.3; }
+  .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; font-size: 13px; color: var(--muted); }
+  .meta b { display: block; color: var(--ink); font-weight: 600; font-size: 13px; }
+  .quals { margin: 0; padding-left: 18px; font-size: 13px; color: var(--ink); line-height: 1.5; }
+  .card .foot { margin-top: auto; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 10px; }
+  .badge { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 999px; }
+  .badge.new { background: var(--gold); color: #3a2a00; position: absolute; top: 14px; right: 14px; }
+  .stamp { position: absolute; top: 18px; right: 14px; transform: rotate(-8deg); border: 2px solid #b23a3a; color: #b23a3a; font-weight: 800; letter-spacing: 2px; padding: 2px 10px; border-radius: 6px; font-size: 13px; background: rgba(255,255,255,.85); }
+  .card.hired { opacity: .7; }
+  .empty { text-align: center; color: var(--muted); padding: 60px 20px; background: #fff; border: 1px dashed var(--line); border-radius: 14px; }
+  /* detail panel */
+  .overlay { position: fixed; inset: 0; background: rgba(10,25,32,.45); display: none; align-items: flex-start; justify-content: center; padding: 40px 16px; overflow-y: auto; z-index: 10; }
+  .overlay.open { display: flex; }
+  .panel { background: #fff; border-radius: 16px; max-width: 720px; width: 100%; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.25); }
+  .panel header { background: var(--seafoam); padding: 22px 24px; position: relative; }
+  .panel header .cat { font-size: 12px; font-weight: 600; color: var(--teal); text-transform: uppercase; letter-spacing: .6px; }
+  .panel header h2 { margin: 4px 0 2px; font-size: 24px; }
+  .panel header .pid { font-size: 13px; color: var(--muted); }
+  .close { position: absolute; top: 14px; right: 14px; border: 0; background: #fff; width: 34px; height: 34px; border-radius: 50%; font-size: 20px; cursor: pointer; color: var(--ink); }
+  .panel .body { padding: 22px 24px; display: grid; gap: 18px; }
+  .panel h4 { margin: 0 0 8px; font-size: 13px; text-transform: uppercase; letter-spacing: .6px; color: var(--teal); }
+  .panel .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+  .panel .facts div { background: var(--bg); border-radius: 10px; padding: 10px 12px; font-size: 13px; color: var(--muted); }
+  .panel .facts b { display: block; color: var(--ink); font-size: 14px; margin-top: 2px; }
+  .panel p { margin: 0; line-height: 1.6; font-size: 14px; }
+  .panel ul { margin: 0; padding-left: 18px; line-height: 1.6; font-size: 14px; }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; border-radius: 10px; font-weight: 600; font-size: 14px; text-decoration: none; border: 1px solid var(--teal); cursor: pointer; font-family: inherit; }
+  .btn.primary { background: var(--teal); color: #fff; }
+  .btn.ghost { background: #fff; color: var(--teal); }
+  .contact { border-top: 1px solid var(--line); padding-top: 16px; font-size: 14px; line-height: 1.6; }
+  footer { color: var(--muted); font-size: 12px; text-align: center; padding: 24px 20px 40px; line-height: 1.6; }
+  @media (max-width: 860px) { .controls { grid-template-columns: 1fr 1fr; } .controls input { grid-column: 1 / -1; } }
+  @media (max-width: 520px) { .hero h1 { font-size: 24px; } .tagline { display: none; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <img src="assets/logo.png" alt="" onerror="this.remove()">
+      <div>Ambient<small>Recruiting</small></div>
+    </div>
+    <div class="tagline">Illuminating the Path Forward</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>Available Candidates</h1>
+    <p>Pre-screened, interviewed candidates ready for their next role. Profiles are anonymized. Contact the listed recruiter to learn more or set up an interview.</p>
+  </div>
+</section>
+
+<main class="wrap">
+  <div class="controls" role="search">
+    <input id="q" type="search" placeholder="Search by role, skill or location" aria-label="Search">
+    <select id="fBranch" aria-label="Branch"><option value="">All branches</option></select>
+    <select id="fShift" aria-label="Shift"><option value="">Any shift</option></select>
+    <select id="fType" aria-label="Employment type"><option value="">Any employment type</option></select>
+    <select id="sort" aria-label="Sort">
+      <option value="new">Newest first</option>
+      <option value="az">Role A–Z</option>
+    </select>
+  </div>
+
+  <div class="bar">
+    <span id="count">Loading candidates…</span>
+    <label><input type="checkbox" id="showHired"> Show hired</label>
+  </div>
+  <div class="chips" id="chips"></div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer>
+  Candidate profiles are prepared by Ambient Recruiting and anonymized to protect candidate privacy.<br>
+  Profile details reflect the candidate's stated preferences at the time of their interview.
+</footer>
+
+<div class="overlay" id="overlay" aria-hidden="true">
+  <div class="panel" role="dialog" aria-modal="true" aria-labelledby="dTitle">
+    <header>
+      <button class="close" id="close" aria-label="Close">×</button>
+      <div class="cat" id="dCat"></div>
+      <h2 id="dTitle"></h2>
+      <div class="pid" id="dId"></div>
+    </header>
+    <div class="body" id="dBody"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const NEW_DAYS = 14;
+  const els = {
+    q: document.getElementById('q'),
+    branch: document.getElementById('fBranch'),
+    shift: document.getElementById('fShift'),
+    type: document.getElementById('fType'),
+    sort: document.getElementById('sort'),
+    hired: document.getElementById('showHired'),
+    chips: document.getElementById('chips'),
+    grid: document.getElementById('grid'),
+    count: document.getElementById('count'),
+    overlay: document.getElementById('overlay')
+  };
+  let all = [];
+  let category = '';
+
+  const el = (tag, cls, text) => {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  };
+  const str = v => { const t = (v == null ? '' : Array.isArray(v) ? v.join(', ') : String(v)).trim(); return t === 'null' ? '' : t; };
+  const isHired = c => /hired|placed/i.test(str(c.status));
+  const daysSince = d => { const t = Date.parse(d); return isNaN(t) ? Infinity : (Date.now() - t) / 86400000; };
+  const splitVals = v => str(v).split(/[,/;]| or /i).map(s => s.trim()).filter(Boolean);
+  const catsOf = c => { const list = Array.isArray(c.categories) ? c.categories.map(str) : []; const primary = str(c.category); return [...new Set([primary, ...list].filter(Boolean))]; };
+  const pdfUrl = c => c.pdf ? 'profiles/' + encodeURIComponent(c.pdf) : '';
+  const fmtDate = d => { const m = str(d).match(/^(\d{4})-(\d{2})-(\d{2})$/); const dt = m ? new Date(+m[1], m[2] - 1, +m[3]) : new Date(Date.parse(d)); return isNaN(dt) ? '' : dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); };
+
+  function fillSelect(sel, values) {
+    [...new Set(values)].filter(Boolean).sort().forEach(v => sel.appendChild(new Option(v, v)));
+  }
+
+  function buildFilters() {
+    fillSelect(els.branch, all.map(c => str(c.branch)));
+    fillSelect(els.shift, all.flatMap(c => splitVals(c.shift)));
+    fillSelect(els.type, all.flatMap(c => splitVals(c.employmentType)));
+    const cats = [...new Set(all.flatMap(catsOf))].sort();
+    els.chips.textContent = '';
+    ['All', ...cats].forEach(name => {
+      const b = el('button', 'chip', name);
+      b.type = 'button';
+      b.setAttribute('aria-pressed', String((name === 'All' && !category) || name === category));
+      b.onclick = () => { category = name === 'All' ? '' : name; buildChipsState(); render(); };
+      els.chips.appendChild(b);
+    });
+  }
+  function buildChipsState() {
+    [...els.chips.children].forEach(b => b.setAttribute('aria-pressed', String((b.textContent === 'All' && !category) || b.textContent === category)));
+  }
+
+  function matches(c) {
+    if (!els.hired.checked && isHired(c)) return false;
+    if (category && !catsOf(c).includes(category)) return false;
+    if (els.branch.value && str(c.branch) !== els.branch.value) return false;
+    if (els.shift.value && !splitVals(c.shift).includes(els.shift.value)) return false;
+    if (els.type.value && !splitVals(c.employmentType).includes(els.type.value)) return false;
+    const q = els.q.value.trim().toLowerCase();
+    if (q) {
+      const hay = [c.headline, ...catsOf(c), c.workArea, c.branch, c.shift, c.employmentType, c.summary, c.workPreference, ...(c.qualifications || [])].map(str).join(' ').toLowerCase();
+      if (!q.split(/\s+/).every(w => hay.includes(w))) return false;
+    }
+    return true;
+  }
+
+  function card(c) {
+    const b = el('button', 'card' + (isHired(c) ? ' hired' : ''));
+    b.type = 'button';
+    b.onclick = () => { location.hash = 'p-' + str(c.id); };
+    if (isHired(c)) b.appendChild(el('span', 'stamp', 'HIRED'));
+    else if (daysSince(c.postedDate) <= NEW_DAYS) b.appendChild(el('span', 'badge new', 'NEW'));
+    b.appendChild(el('div', 'cat', str(c.category) || 'Candidate'));
+    b.appendChild(el('h3', null, str(c.headline) || 'Candidate Profile'));
+    const meta = el('div', 'meta');
+    [['Work Area', c.workArea], ['Shift', c.shift], ['Employment', c.employmentType], ['Desired Pay', c.desiredPay]].forEach(([k, v]) => {
+      const d = el('div', null, k); d.appendChild(el('b', null, str(v) || '—')); meta.appendChild(d);
+    });
+    b.appendChild(meta);
+    const quals = (c.qualifications || []).slice(0, 3);
+    if (quals.length) { const ul = el('ul', 'quals'); quals.forEach(q => ul.appendChild(el('li', null, str(q)))); b.appendChild(ul); }
+    const foot = el('div', 'foot');
+    foot.appendChild(el('span', null, 'Profile #' + str(c.id)));
+    foot.appendChild(el('span', null, str(c.branch)));
+    b.appendChild(foot);
+    return b;
+  }
+
+  function render() {
+    let list = all.filter(matches);
+    if (els.sort.value === 'az') list.sort((a, b) => str(a.headline).localeCompare(str(b.headline)));
+    else list.sort((a, b) => (Date.parse(b.postedDate) || 0) - (Date.parse(a.postedDate) || 0));
+    els.grid.textContent = '';
+    if (!list.length) {
+      const e = el('div', 'empty', all.length ? 'No candidates match those filters. Try clearing a filter.' : 'No candidates are posted yet. Check back soon.');
+      e.style.gridColumn = '1 / -1';
+      els.grid.appendChild(e);
+    } else list.forEach(c => els.grid.appendChild(card(c)));
+    els.count.textContent = list.length + ' candidate' + (list.length === 1 ? '' : 's');
+  }
+
+  function fact(k, v) { const d = el('div', null, k); d.appendChild(el('b', null, str(v) || '—')); return d; }
+  function section(title, node) { const s = el('section'); s.appendChild(el('h4', null, title)); s.appendChild(node); return s; }
+
+  function openDetail(id) {
+    const c = all.find(x => str(x.id) === id);
+    if (!c) return closeDetail();
+    document.getElementById('dCat').textContent = str(c.category);
+    document.getElementById('dTitle').textContent = str(c.headline) || 'Candidate Profile';
+    document.getElementById('dId').textContent = 'Profile #' + str(c.id) + (c.postedDate ? ' · Posted ' + fmtDate(c.postedDate) : '') + (isHired(c) ? ' · HIRED' : '');
+    const body = document.getElementById('dBody');
+    body.textContent = '';
+    const facts = el('div', 'facts');
+    facts.append(fact('Preferred Work Area', c.workArea), fact('Shift', c.shift), fact('Employment Type', c.employmentType), fact('Desired Pay', c.desiredPay), fact('Branch', c.branch));
+    if (str(c.schedule)) facts.append(fact('Schedule', c.schedule));
+    if (str(c.education)) facts.append(fact('Education', c.education));
+    body.appendChild(facts);
+    const others = catsOf(c).filter(x => x !== str(c.category));
+    if (others.length) body.appendChild(section('Also Qualified For', el('p', null, others.join(' · '))));
+    if (str(c.summary)) body.appendChild(section('Summary', el('p', null, str(c.summary))));
+    if (str(c.workPreference)) body.appendChild(section('Work Preference', el('p', null, str(c.workPreference))));
+    if ((c.qualifications || []).length) { const ul = el('ul'); c.qualifications.forEach(q => ul.appendChild(el('li', null, str(q)))); body.appendChild(section('Core Qualifications', ul)); }
+    const actions = el('div', 'actions');
+    if (pdfUrl(c)) { const a = el('a', 'btn primary', 'View Full Profile (PDF)'); a.href = pdfUrl(c); a.target = '_blank'; a.rel = 'noopener'; actions.appendChild(a); }
+    const copy = el('button', 'btn ghost', 'Copy Link'); copy.type = 'button';
+    copy.onclick = () => { navigator.clipboard?.writeText(location.href).then(() => { copy.textContent = 'Link Copied'; setTimeout(() => copy.textContent = 'Copy Link', 1500); }).catch(() => {}); };
+    actions.appendChild(copy);
+    body.appendChild(actions);
+    const r = c.recruiter || {};
+    if (str(r.name) || str(r.phone) || str(r.email)) {
+      const ct = el('div', 'contact');
+      ct.appendChild(el('h4', null, 'Interested? Contact'));
+      ct.appendChild(el('div', null, [str(r.name), str(r.title)].filter(Boolean).join(', ')));
+      if (str(r.phone)) ct.appendChild(el('div', null, str(r.phone)));
+      if (str(r.email)) { const a = el('a', null, str(r.email)); a.href = 'mailto:' + str(r.email); const d = el('div'); d.appendChild(a); ct.appendChild(d); }
+      body.appendChild(ct);
+    }
+    els.overlay.classList.add('open');
+    els.overlay.setAttribute('aria-hidden', 'false');
+    document.getElementById('close').focus();
+  }
+  function closeDetail() {
+    els.overlay.classList.remove('open');
+    els.overlay.setAttribute('aria-hidden', 'true');
+  }
+  function route() {
+    const m = location.hash.match(/^#p-(.+)$/);
+    if (m) openDetail(decodeURIComponent(m[1])); else closeDetail();
+  }
+  const clearHash = () => history.pushState('', document.title, location.pathname + location.search) || route();
+
+  document.getElementById('close').onclick = clearHash;
+  els.overlay.addEventListener('click', e => { if (e.target === els.overlay) clearHash(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && els.overlay.classList.contains('open')) clearHash(); });
+  window.addEventListener('hashchange', route);
+  [els.q, els.branch, els.shift, els.type, els.sort, els.hired].forEach(i => i.addEventListener('input', render));
+
+  fetch('data/candidates.json', { cache: 'no-store' })
+    .then(r => r.ok ? r.json() : [])
+    .catch(() => [])
+    .then(data => {
+      all = Array.isArray(data) ? data : [];
+      buildFilters();
+      render();
+      route();
+    });
+})();
+</script>
+</body>
+</html>
